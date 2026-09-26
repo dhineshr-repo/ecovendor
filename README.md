@@ -16,8 +16,6 @@
 | [`apexlang_esg_hub_spec.yaml`](./apexlang_esg_hub_spec.yaml) | Declarative APEXLang application specification defining data models, Redwood UI pages, drawers, and AI assistant metadata. |
 | [`quicksql_esg_hub.sql`](./quicksql_esg_hub.sql) | Quick SQL shorthand script for fast schema generation in Oracle APEX SQL Workshop. |
 | [`esg_schema_clean.sql`](./esg_schema_clean.sql) | Complete Oracle Database DDL script with tables (`ESG_SUPPLIERS`, `ESG_SUPPLIER_AUDITS`, `ESG_RISK_ALERTS`), constraints, audit triggers, and sample dataset. |
-| [`oracle_ace_hands_on_blog.md`](./oracle_ace_hands_on_blog.md) | The complete technical deep-dive blog post for the Oracle ACE community. |
-| [`video_demo_storyboard_script.md`](./video_demo_storyboard_script.md) | Scene-by-scene video recording script and visual cues for the hands-on demo. |
 | [`screenshots/`](./screenshots/) | High-resolution hands-on screenshots from the live deployment on Oracle APEX. |
 
 ---
