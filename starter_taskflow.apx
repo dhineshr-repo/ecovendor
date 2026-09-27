@@ -1,0 +1,383 @@
+// ==============================================================================
+// APEXLang Starter Example: TaskFlow - Simple Task Tracker
+// File: starter_taskflow.apx
+// Specification: 1 Table, 3 Pages (Home Cards, Interactive Report, Modal Form)
+// ==============================================================================
+
+// ------------------------------------------------------------------------------
+// Companion Quick SQL Schema (Run in APEX SQL Workshop -> Quick SQL):
+// ------------------------------------------------------------------------------
+// # settings = { prefix: "TF", pk: "IDENTITY", auditcols: true, drop: true }
+//
+// tasks /insert 5
+//   title vc100 /nn
+//   category vc50 /values Engineering, Marketing, Operations, Finance
+//   priority vc20 /values Low, Medium, High, Urgent
+//   status vc20 /values Open, In Progress, Completed, On Hold
+//   assigned_to_email vc120
+//   due_date date
+//   estimated_hours num(4,1)
+//   description clob
+// ------------------------------------------------------------------------------
+
+app TASKFLOW (
+    name: TaskFlow - Simple Task Tracker
+    alias: TASKFLOW
+    version: 1.0.0
+
+    logo {
+        type: text
+        text: TaskFlow
+    }
+
+    navigation {
+        homeUrl: {
+            page: 1
+        }
+        loginUrl: {
+            page: LOGIN
+        }
+    }
+
+    navigationMenu {
+        listTemplate: @/side-navigation-menu
+        templateOptions: [
+            #DEFAULT#
+            t-TreeNav--styleA
+        ]
+        list: @navigation-menu
+    }
+
+    userInterface {
+        currentTheme: @universal-theme
+        themeStyle: Redwood Light
+        globalPage: 0
+    }
+
+    authentication {
+        scheme: @oracle-apex-accounts
+    }
+
+    runtime {
+        compatibilityMode: 24.2
+    }
+)
+
+// ==============================================================================
+// Page 1: Home Dashboard (Cards Region)
+// ==============================================================================
+page 1 (
+    name: Home
+    alias: HOME
+    title: TaskFlow Dashboard
+
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+
+    region task-metrics (
+        name: Active Tasks Summary
+        type: cards
+
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select ID,
+                       TITLE,
+                       CATEGORY,
+                       PRIORITY,
+                       STATUS,
+                       DUE_DATE
+                  from TF_TASKS
+                 order by DUE_DATE asc
+                ```
+        }
+
+        layout {
+            sequence: 10
+            slot: body
+        }
+
+        appearance {
+            template: @/cards
+            templateOptions: [
+                #DEFAULT#
+                t-Cards--featured
+                t-Cards--displayIcons
+            ]
+        }
+
+        cardTitle: TITLE
+        cardSubtitle: CATEGORY
+        cardBody: STATUS
+        cardSecondaryBody: PRIORITY
+
+        actions {
+            primary {
+                type: link
+                label: Edit Task
+                target: {
+                    page: 3
+                    values: {
+                        P3_ID: #ID#
+                    }
+                }
+            }
+        }
+    )
+)
+
+// ==============================================================================
+// Page 2: Tasks Interactive Report
+// ==============================================================================
+page 2 (
+    name: Tasks
+    alias: TASKS
+    title: All Tasks Directory
+
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+
+    region tasks-report (
+        name: Tasks
+        type: interactiveReport
+
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select ID,
+                       TITLE,
+                       CATEGORY,
+                       PRIORITY,
+                       STATUS,
+                       ASSIGNED_TO_EMAIL,
+                       DUE_DATE,
+                       ESTIMATED_HOURS
+                  from TF_TASKS
+                ```
+        }
+
+        layout {
+            sequence: 10
+            slot: body
+        }
+
+        appearance {
+            template: @/interactive-report
+            templateOptions: #DEFAULT#
+        }
+
+        // Link icon to open Edit Modal Form (Page 3)
+        link {
+            linkColumn: TITLE
+            target: {
+                page: 3
+                values: {
+                    P3_ID: #ID#
+                }
+            }
+            linkIcon: fa-edit
+        }
+
+        pagination {
+            type: rowRangesWithLinks
+        }
+
+        column ID (
+            type: hidden
+            isPrimaryKey: true
+        )
+
+        column TITLE (
+            heading: Task Title
+            type: link
+            alignment: start
+        )
+
+        column CATEGORY (
+            heading: Category
+            type: plainText
+            filter: true
+        )
+
+        column PRIORITY (
+            heading: Priority
+            type: plainText
+            alignment: center
+            highlight: true
+        )
+
+        column STATUS (
+            heading: Status
+            type: badge
+            alignment: center
+        )
+
+        column ASSIGNED_TO_EMAIL (
+            heading: Assignee
+            type: plainText
+        )
+
+        column DUE_DATE (
+            heading: Due Date
+            type: date
+            formatMask: DS
+            alignment: center
+        )
+
+        column ESTIMATED_HOURS (
+            heading: Est. Hours
+            type: number
+            formatMask: 990D0
+            alignment: end
+        )
+    )
+
+    button create-task (
+        name: Create Task
+        label: Create Task
+        type: redirect
+        target: {
+            page: 3
+        }
+        layout {
+            sequence: 10
+            slot: rightOfTitle
+        }
+        appearance {
+            buttonTemplate: @/text-icon
+            templateOptions: [
+                #DEFAULT#
+                t-Button--hot
+            ]
+            icon: fa-plus
+        }
+    )
+)
+
+// ==============================================================================
+// Page 3: Task Create / Edit Modal Dialog
+// ==============================================================================
+page 3 (
+    name: Task Details
+    alias: TASK_FORM
+    title: Task Details
+    type: modalDialog
+
+    appearance {
+        pageTemplate: @/modal-dialog
+        templateOptions: [
+            #DEFAULT#
+            t-Dialog--medium
+        ]
+    }
+
+    region task-form (
+        name: Task Details Form
+        type: form
+
+        source {
+            location: localDatabase
+            type: tableOrView
+            tableName: TF_TASKS
+            primaryKeyColumn: ID
+        }
+
+        layout {
+            sequence: 10
+            slot: body
+        }
+
+        item P3_ID (
+            type: hidden
+            isPrimaryKey: true
+        )
+
+        item P3_TITLE (
+            label: Task Title
+            type: text
+            required: true
+        )
+
+        item P3_CATEGORY (
+            label: Department / Category
+            type: selectList
+            lov: STATIC:Engineering;Engineering,Marketing;Marketing,Operations;Operations,Finance;Finance
+            required: true
+        )
+
+        item P3_PRIORITY (
+            label: Priority
+            type: radioGroup
+            lov: STATIC:Low;Low,Medium;Medium,High;High,Urgent;Urgent
+            defaultValue: Medium
+        )
+
+        item P3_STATUS (
+            label: Status
+            type: selectList
+            lov: STATIC:Open;Open,In Progress;In Progress,Completed;Completed,On Hold;On Hold
+            defaultValue: Open
+        )
+
+        item P3_ASSIGNED_TO_EMAIL (
+            label: Assignee Email
+            type: text
+        )
+
+        item P3_DUE_DATE (
+            label: Due Date
+            type: datePicker
+        )
+
+        item P3_ESTIMATED_HOURS (
+            label: Estimated Hours
+            type: number
+        )
+
+        item P3_DESCRIPTION (
+            label: Description & Notes
+            type: textarea
+        )
+    )
+
+    // Save and Cancel Action Buttons
+    button btn-cancel (
+        name: Cancel
+        label: Cancel
+        type: cancelDialog
+        layout {
+            sequence: 10
+            slot: close
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    button btn-save (
+        name: Save
+        label: Save Changes
+        type: submit
+        layout {
+            sequence: 20
+            slot: create
+        }
+        appearance {
+            buttonTemplate: @/text-icon
+            templateOptions: [
+                #DEFAULT#
+                t-Button--hot
+            ]
+            icon: fa-check
+        }
+    )
+)
