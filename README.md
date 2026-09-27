@@ -12,7 +12,8 @@
 
 | File / Directory | Description |
 |---|---|
-| [`apexlang_esg_hub_spec.yaml`](./apexlang_esg_hub_spec.yaml) | Declarative APEXLang application specification defining data models, Redwood UI pages, drawers, and AI assistant metadata. |
+| [`ecovendor_app.apx`](./ecovendor_app.apx) | Authentic declarative APEXLang (`.apx`) specification conforming to the official Oracle APEXLang grammar (`oracle/skills/apex/apexlang`). |
+| [`applications/ecovendor/`](./applications/ecovendor/) | Standard modular APEXLang application tree (`application.apx`, `pages/p00001-home.apx`, etc.). |
 | [`quicksql_esg_hub.sql`](./quicksql_esg_hub.sql) | Quick SQL shorthand script for fast schema generation in Oracle APEX SQL Workshop. |
 | [`esg_schema_clean.sql`](./esg_schema_clean.sql) | Complete Oracle Database DDL script with tables (`ESG_SUPPLIERS`, `ESG_SUPPLIER_AUDITS`, `ESG_RISK_ALERTS`), constraints, audit triggers, and sample dataset. |
 | [`screenshots/`](./screenshots/) | High-resolution hands-on screenshots from the live deployment on Oracle APEX. |

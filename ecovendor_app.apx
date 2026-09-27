@@ -1,0 +1,446 @@
+// ==============================================================================
+// APEXLang Application Specification: EcoVendor - ESG & Supplier Risk Hub
+// Conforms to Oracle APEXLang Grammar (oracle/skills/apex/apexlang)
+// ==============================================================================
+
+app ECOVENDOR (
+    name: EcoVendor - ESG & Supplier Risk Hub
+    alias: ECOVENDOR
+    version: 1.0.0
+
+    logo {
+        type: text
+        text: &APP_TITLE.
+    }
+
+    navigation {
+        homeUrl: {
+            page: 1
+        }
+        loginUrl: {
+            page: LOGIN
+        }
+    }
+
+    navigationMenu {
+        listTemplate: @/side-navigation-menu
+        templateOptions: [
+            #DEFAULT#
+            t-TreeNav--styleA
+        ]
+        list: @navigation-menu
+    }
+
+    navigationBar {
+        list: @navigation-bar
+        listTemplate: @/navigation-bar
+        templateOptions: #DEFAULT#
+    }
+
+    userInterface {
+        currentTheme: @universal-theme
+        themeStyle: Redwood Light
+        globalPage: 0
+        addBuiltWithApexToFooter: false
+    }
+
+    appFormatMasks {
+        date: DS
+        timestamp: DS
+        timestampTimeZone: DS
+    }
+
+    authentication {
+        scheme: @oracle-apex-accounts
+    }
+
+    authorization {
+        sourceForRoleOrGroupSchemes: authenticationScheme
+    }
+
+    sessionManagement {
+        maxSessionIdleTime: 3600
+        maxSessionLength: 28800
+    }
+
+    runtime {
+        allowFeedback: true
+        compatibilityMode: 24.2
+    }
+)
+
+// ==============================================================================
+// Page 1: Home & Executive Dashboard
+// ==============================================================================
+page 1 (
+    name: Home
+    alias: HOME
+    title: EcoVendor Executive ESG Hub
+
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+
+    region hero-banner (
+        name: Overview Hero
+        title: &APP_TITLE.
+        type: staticContent
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/hero
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region kpi-cards (
+        name: Executive Key Risk Metrics
+        type: cards
+        layout {
+            sequence: 20
+            slot: body
+        }
+        source {
+            location: localDatabase
+            type: tableOrView
+            tableName: ESG_SUPPLIERS
+        }
+        appearance {
+            template: @/cards
+            templateOptions: [
+                #DEFAULT#
+                t-Cards--featured
+                t-Cards--displayIcons
+            ]
+        }
+    )
+)
+
+// ==============================================================================
+// Page 2: Suppliers Interactive Report
+// ==============================================================================
+page 2 (
+    name: Suppliers
+    alias: SUPPLIERS
+    title: Supplier ESG Directory & Performance
+
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+
+    region suppliers-report (
+        name: Suppliers Directory
+        type: interactiveReport
+
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select ID,
+                       NAME,
+                       CODE,
+                       COUNTRY,
+                       INDUSTRY,
+                       TIER,
+                       ESG_RATING,
+                       CARBON_INTENSITY_SCORE,
+                       FINANCIAL_RISK_INDEX,
+                       AUDIT_STATUS,
+                       CONTRACT_ANNUAL_VALUE,
+                       LAST_AUDIT_DATE,
+                       NEXT_AUDIT_DUE_DATE
+                  from ESG_SUPPLIERS
+                ```
+        }
+
+        layout {
+            sequence: 10
+            slot: body
+        }
+
+        appearance {
+            template: @/interactive-report
+            templateOptions: #DEFAULT#
+        }
+
+        link {
+            linkColumn: NAME
+            target: {
+                page: 3
+                values: {
+                    P3_ID: #ID#
+                }
+            }
+            linkIcon: fa-edit
+        }
+
+        pagination {
+            type: rowRangesWithLinks
+        }
+
+        column ID (
+            type: hidden
+            isPrimaryKey: true
+        )
+
+        column NAME (
+            heading: Supplier Name
+            type: link
+            alignment: start
+        )
+
+        column CODE (
+            heading: Vendor Code
+            type: plainText
+        )
+
+        column COUNTRY (
+            heading: Country
+            type: plainText
+            filter: true
+        )
+
+        column INDUSTRY (
+            heading: Industry
+            type: plainText
+            filter: true
+        )
+
+        column TIER (
+            heading: Supply Tier
+            type: plainText
+        )
+
+        column ESG_RATING (
+            heading: ESG Rating
+            type: plainText
+            alignment: center
+            highlight: true
+        )
+
+        column CARBON_INTENSITY_SCORE (
+            heading: Carbon Index (0-100)
+            type: number
+            formatMask: 990D0
+            alignment: end
+        )
+
+        column FINANCIAL_RISK_INDEX (
+            heading: Financial Risk
+            type: plainText
+            alignment: center
+        )
+
+        column AUDIT_STATUS (
+            heading: Compliance Status
+            type: badge
+            alignment: center
+        )
+
+        column CONTRACT_ANNUAL_VALUE (
+            heading: Annual Contract
+            type: number
+            formatMask: FML999G999G999D00
+            alignment: end
+        )
+
+        column LAST_AUDIT_DATE (
+            heading: Last Audit
+            type: date
+            formatMask: DS
+        )
+
+        column NEXT_AUDIT_DUE_DATE (
+            heading: Next Due
+            type: date
+            formatMask: DS
+        )
+    )
+)
+
+// ==============================================================================
+// Page 3: Supplier Detail Modal Drawer
+// ==============================================================================
+page 3 (
+    name: Supplier Details
+    alias: SUPPLIER_DETAIL
+    title: Supplier Risk & Audit Remediation
+    type: drawerModal
+
+    appearance {
+        pageTemplate: @/modal-drawer
+        templateOptions: [
+            #DEFAULT#
+            t-Drawer--pullOutEnd
+            t-Drawer--lg
+        ]
+    }
+
+    region supplier-form (
+        name: Supplier Risk Profile
+        type: form
+        source {
+            location: localDatabase
+            type: tableOrView
+            tableName: ESG_SUPPLIERS
+            primaryKeyColumn: ID
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+
+        item P3_ID (
+            type: hidden
+            isPrimaryKey: true
+        )
+
+        item P3_NAME (
+            label: Supplier Name
+            type: text
+            required: true
+        )
+
+        item P3_CODE (
+            label: Supplier Code
+            type: text
+            required: true
+        )
+
+        item P3_COUNTRY (
+            label: Country
+            type: text
+            required: true
+        )
+
+        item P3_INDUSTRY (
+            label: Industry Sector
+            type: selectList
+            lov: STATIC:Automotive;Automotive,Energy;Energy,Electronics;Electronics,Healthcare;Healthcare,Manufacturing;Manufacturing,Retail;Retail
+        )
+
+        item P3_ESG_RATING (
+            label: ESG Rating
+            type: radioGroup
+            lov: STATIC:A;A,B;B,C;C,D;D,F;F
+        )
+
+        item P3_CARBON_INTENSITY_SCORE (
+            label: Carbon Intensity Score (0-100)
+            type: number
+        )
+
+        item P3_FINANCIAL_RISK_INDEX (
+            label: Financial Risk Level
+            type: selectList
+            lov: STATIC:Low;Low,Medium;Medium,High;High,Critical;Critical
+        )
+
+        item P3_AUDIT_STATUS (
+            label: Audit Compliance Status
+            type: selectList
+            lov: STATIC:Compliant;Compliant,Pending Audit;Pending Audit,Action Required;Action Required,Non Compliant;Non Compliant
+        )
+
+        item P3_COMPLIANCE_NOTES (
+            label: Compliance & Remediation Notes
+            type: textarea
+        )
+
+        item P3_VECTOR_RISK_SUMMARY (
+            label: AI Synthesized Risk Summary
+            type: textarea
+        )
+    )
+)
+
+// ==============================================================================
+// Page 4: Supplier ESG Multi-Year Audits
+// ==============================================================================
+page 4 (
+    name: Supplier Audits
+    alias: SUPPLIER_AUDITS
+    title: Multi-Year Greenhouse Gas & ESG Audits
+
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+
+    region audits-report (
+        name: Annual ESG Audits Log
+        type: interactiveReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select a.ID,
+                       s.NAME as SUPPLIER_NAME,
+                       a.AUDIT_YEAR,
+                       a.AUDITOR_NAME,
+                       a.SCOPE1_CO2_TONNES,
+                       a.SCOPE2_CO2_TONNES,
+                       a.SCOPE3_CO2_TONNES,
+                       a.RENEWABLE_ENERGY_PCT,
+                       a.LABOR_ETHICS_SCORE,
+                       a.GOVERNANCE_SCORE,
+                       a.COMPOSITE_ESG_SCORE,
+                       a.AUDIT_VERDICT,
+                       a.CORRECTIVE_ACTIONS
+                  from ESG_SUPPLIER_AUDITS a
+                  join ESG_SUPPLIERS s on s.ID = a.SUPPLIER_ID
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+    )
+)
+
+// ==============================================================================
+// Page 6: Risk Alerts & Anomaly Intelligence Feed
+// ==============================================================================
+page 6 (
+    name: Risk Alerts
+    alias: RISK_ALERTS
+    title: Supply Chain Risk & Anomaly Intelligence
+
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+
+    region alerts-report (
+        name: Real-Time Anomaly Stream
+        type: interactiveReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select r.ID,
+                       s.NAME as SUPPLIER_NAME,
+                       r.ALERT_DATE,
+                       r.ALERT_SEVERITY,
+                       r.ALERT_TYPE,
+                       r.ALERT_HEADLINE,
+                       r.ALERT_DESCRIPTION,
+                       r.IS_RESOLVED_YN
+                  from ESG_RISK_ALERTS r
+                  join ESG_SUPPLIERS s on s.ID = r.SUPPLIER_ID
+                 order by r.ALERT_DATE desc
+                ```
+        }
+        layout {
+            sequence: 10
+            slot: body
+        }
+    )
+)
