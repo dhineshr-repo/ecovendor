@@ -1,7 +1,7 @@
 # EcoVendor: Autonomous ESG & Supplier Risk Hub
 ### Built with IBM Consulting Advantage (ICA) Edge & APEXLang for Oracle APEX
 
-[![Oracle APEX](https://img.shields.io/badge/Oracle%20APEX-24.x%20%7C%2026.x-red.svg)](https://apex.oracle.com)
+[![Oracle APEX](https://img.shields.io/badge/Oracle%20APEX-%2026.1-red.svg)](https://apex.oracle.com)
 [![Oracle ACE](https://img.shields.io/badge/Oracle-ACE%20Program-orange.svg)](https://ace.oracle.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
