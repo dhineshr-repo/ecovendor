@@ -1,0 +1,406 @@
+// ==============================================================================
+// APEXLang Starter Example: AssetVault - IT Hardware & Device Registry
+// File: starter_assetvault.apx
+// Single-Table, 3-Page Application (KPI Cards, Interactive Report, Drawer Form)
+// ==============================================================================
+
+// ------------------------------------------------------------------------------
+// Companion Quick SQL Schema (Run in APEX SQL Workshop -> Quick SQL):
+// ------------------------------------------------------------------------------
+// # settings = { prefix: "AV", pk: "IDENTITY", auditcols: true, drop: true }
+//
+// assets /insert 10
+//   tag_number vc30 /nn /unique
+//   device_type vc50 /values Laptop, Desktop, Monitor, Server, Mobile, Tablet
+//   model_name vc100 /nn
+//   serial_number vc60 /nn /unique
+//   assigned_to_email vc120
+//   department vc50 /values Engineering, Sales, Product, HR, Finance, Executive
+//   status vc20 /values Active, In Stock, Repair, Retired, Lost
+//   purchase_date date
+//   warranty_end_date date
+//   purchase_cost num(10,2)
+//   asset_notes clob
+// ------------------------------------------------------------------------------
+
+app ASSETVAULT (
+    name: AssetVault - IT Hardware Inventory
+    alias: ASSETVAULT
+    version: 1.0.0
+
+    logo {
+        type: text
+        text: AssetVault
+    }
+
+    navigation {
+        homeUrl: {
+            page: 1
+        }
+        loginUrl: {
+            page: LOGIN
+        }
+    }
+
+    navigationMenu {
+        listTemplate: @/side-navigation-menu
+        templateOptions: [
+            #DEFAULT#
+            t-TreeNav--styleA
+        ]
+        list: @navigation-menu
+    }
+
+    userInterface {
+        currentTheme: @universal-theme
+        themeStyle: Redwood Light
+        globalPage: 0
+    }
+
+    authentication {
+        scheme: @oracle-apex-accounts
+    }
+
+    runtime {
+        compatibilityMode: 24.2
+    }
+)
+
+// ==============================================================================
+// Page 1: Dashboard & KPI Overview
+// ==============================================================================
+page 1 (
+    name: Dashboard
+    alias: DASHBOARD
+    title: IT Asset Overview
+
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+
+    region asset-cards (
+        name: Active Equipment Cards
+        type: cards
+
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select ID,
+                       TAG_NUMBER,
+                       DEVICE_TYPE,
+                       MODEL_NAME,
+                       DEPARTMENT,
+                       STATUS
+                  from AV_ASSETS
+                 where STATUS in ('Active', 'In Stock')
+                 order by TAG_NUMBER asc
+                ```
+        }
+
+        layout {
+            sequence: 10
+            slot: body
+        }
+
+        appearance {
+            template: @/cards
+            templateOptions: [
+                #DEFAULT#
+                t-Cards--featured
+                t-Cards--displayIcons
+            ]
+        }
+
+        cardTitle: MODEL_NAME
+        cardSubtitle: TAG_NUMBER
+        cardBody: DEPARTMENT
+        cardSecondaryBody: STATUS
+
+        actions {
+            primary {
+                type: link
+                label: View Details
+                target: {
+                    page: 3
+                    values: {
+                        P3_ID: #ID#
+                    }
+                }
+            }
+        }
+    )
+)
+
+// ==============================================================================
+// Page 2: Asset Registry (Interactive Report)
+// ==============================================================================
+page 2 (
+    name: Asset Inventory
+    alias: ASSETS
+    title: Enterprise Asset Directory
+
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+
+    region assets-report (
+        name: Hardware Inventory
+        type: interactiveReport
+
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select ID,
+                       TAG_NUMBER,
+                       DEVICE_TYPE,
+                       MODEL_NAME,
+                       SERIAL_NUMBER,
+                       ASSIGNED_TO_EMAIL,
+                       DEPARTMENT,
+                       STATUS,
+                       PURCHASE_DATE,
+                       WARRANTY_END_DATE,
+                       PURCHASE_COST
+                  from AV_ASSETS
+                ```
+        }
+
+        layout {
+            sequence: 10
+            slot: body
+        }
+
+        appearance {
+            template: @/interactive-report
+            templateOptions: #DEFAULT#
+        }
+
+        link {
+            linkColumn: TAG_NUMBER
+            target: {
+                page: 3
+                values: {
+                    P3_ID: #ID#
+                }
+            }
+            linkIcon: fa-edit
+        }
+
+        column ID (
+            type: hidden
+            isPrimaryKey: true
+        )
+
+        column TAG_NUMBER (
+            heading: Asset Tag
+            type: link
+            alignment: start
+        )
+
+        column DEVICE_TYPE (
+            heading: Type
+            type: plainText
+            filter: true
+        )
+
+        column MODEL_NAME (
+            heading: Model / Specs
+            type: plainText
+        )
+
+        column DEPARTMENT (
+            heading: Department
+            type: plainText
+            filter: true
+        )
+
+        column STATUS (
+            heading: Status
+            type: badge
+            alignment: center
+            highlight: true
+        )
+
+        column ASSIGNED_TO_EMAIL (
+            heading: Assigned User
+            type: plainText
+        )
+
+        column PURCHASE_COST (
+            heading: Cost
+            type: number
+            formatMask: FML999G999G999D00
+            alignment: end
+        )
+
+        column WARRANTY_END_DATE (
+            heading: Warranty Expiry
+            type: date
+            formatMask: DS
+            alignment: center
+        )
+    )
+
+    button btn-create (
+        name: Add Asset
+        label: Register New Asset
+        type: redirect
+        target: {
+            page: 3
+        }
+        layout {
+            sequence: 10
+            slot: rightOfTitle
+        }
+        appearance {
+            buttonTemplate: @/text-icon
+            templateOptions: [
+                #DEFAULT#
+                t-Button--hot
+            ]
+            icon: fa-plus
+        }
+    )
+)
+
+// ==============================================================================
+// Page 3: Asset Details Slide-out Drawer
+// ==============================================================================
+page 3 (
+    name: Asset Profile
+    alias: ASSET_PROFILE
+    title: Device Registration & Warranty
+    type: drawerModal
+
+    appearance {
+        pageTemplate: @/modal-drawer
+        templateOptions: [
+            #DEFAULT#
+            t-Drawer--pullOutEnd
+            t-Drawer--lg
+        ]
+    }
+
+    region asset-form (
+        name: Device Specification Form
+        type: form
+
+        source {
+            location: localDatabase
+            type: tableOrView
+            tableName: AV_ASSETS
+            primaryKeyColumn: ID
+        }
+
+        layout {
+            sequence: 10
+            slot: body
+        }
+
+        item P3_ID (
+            type: hidden
+            isPrimaryKey: true
+        )
+
+        item P3_TAG_NUMBER (
+            label: Asset Tag #
+            type: text
+            required: true
+        )
+
+        item P3_DEVICE_TYPE (
+            label: Equipment Category
+            type: selectList
+            lov: STATIC:Laptop;Laptop,Desktop;Desktop,Monitor;Monitor,Server;Server,Mobile;Mobile,Tablet;Tablet
+            required: true
+        )
+
+        item P3_MODEL_NAME (
+            label: Make & Model
+            type: text
+            required: true
+        )
+
+        item P3_SERIAL_NUMBER (
+            label: Manufacturer Serial #
+            type: text
+            required: true
+        )
+
+        item P3_STATUS (
+            label: Lifecycle Status
+            type: radioGroup
+            lov: STATIC:Active;Active,In Stock;In Stock,Repair;Repair,Retired;Retired,Lost;Lost
+            defaultValue: Active
+        )
+
+        item P3_DEPARTMENT (
+            label: Department Allocation
+            type: selectList
+            lov: STATIC:Engineering;Engineering,Sales;Sales,Product;Product,HR;HR,Finance;Finance,Executive;Executive
+        )
+
+        item P3_ASSIGNED_TO_EMAIL (
+            label: Custodian / User Email
+            type: text
+        )
+
+        item P3_PURCHASE_DATE (
+            label: Acquired Date
+            type: datePicker
+        )
+
+        item P3_WARRANTY_END_DATE (
+            label: Warranty End Date
+            type: datePicker
+        )
+
+        item P3_PURCHASE_COST (
+            label: Purchase Price
+            type: number
+        )
+
+        item P3_ASSET_NOTES (
+            label: Maintenance & Condition Notes
+            type: textarea
+        )
+    )
+
+    button btn-cancel (
+        name: Cancel
+        label: Cancel
+        type: cancelDialog
+        layout {
+            sequence: 10
+            slot: close
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    button btn-save (
+        name: Save
+        label: Save Asset
+        type: submit
+        layout {
+            sequence: 20
+            slot: create
+        }
+        appearance {
+            buttonTemplate: @/text-icon
+            templateOptions: [
+                #DEFAULT#
+                t-Button--hot
+            ]
+            icon: fa-check
+        }
+    )
+)
