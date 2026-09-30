@@ -137,14 +137,18 @@
       - Entry:
         - Display: Resolved & Closed
         - Return: RESOLVED
-- Page Groups:
-  - Page Group: Home
+- Page Groups
+  - Page Group
+    - Name: Home
     - Description: Landing dashboard and executive KPIs.
-  - Page Group: Supplier Directory
+  - Page Group
+    - Name: Supplier Directory
     - Description: Supplier master data, risk classification, and profile forms.
-  - Page Group: ESG & Carbon Audits
+  - Page Group
+    - Name: ESG & Carbon Audits
     - Description: Greenhouse gas disclosures, Scope 1-3 metrics, and audit reviews.
-  - Page Group: Risk & Alerts Feed
+  - Page Group
+    - Name: Risk & Alerts Feed
     - Description: AI anomaly intelligence and exception mitigation workflows.
 - Menu:
   - Menu Entry:
