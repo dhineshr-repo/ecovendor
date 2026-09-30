@@ -1,0 +1,257 @@
+# Table: ESG_SUPPLIERS
+
+## Columns:
+  - SUPPLIER_ID - NUMBER NOT NULL [pk]
+  - SUPPLIER_CODE - VARCHAR2(30) NOT NULL [uk]
+  - SUPPLIER_NAME - VARCHAR2(200) NOT NULL
+  - COUNTRY_CODE - VARCHAR2(3) NOT NULL
+  - REGION_NAME - VARCHAR2(50) NOT NULL
+  - ESG_RATING - VARCHAR2(10) NOT NULL
+  - CARBON_INTENSITY_SCORE - NUMBER(5,2)
+  - FINANCIAL_RISK_INDEX - VARCHAR2(20) NOT NULL
+  - AUDIT_STATUS - VARCHAR2(30) NOT NULL
+  - PRIMARY_CONTACT_NAME - VARCHAR2(150)
+  - PRIMARY_CONTACT_EMAIL - VARCHAR2(255)
+  - CONTRACT_VALUE - NUMBER(14,2)
+  - LAST_AUDIT_DATE - DATE
+  - NEXT_AUDIT_DUE_DATE - DATE
+  - NOTES - VARCHAR2(4000)
+  - CREATED_AT - TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+  - CREATED_BY - VARCHAR2(255) NOT NULL
+  - UPDATED_AT - TIMESTAMP WITH LOCAL TIME ZONE
+  - UPDATED_BY - VARCHAR2(255)
+
+## Column Display Attributes:
+  - SUPPLIER_ID
+    - description: Surrogate primary key for the supplier record.
+    - display-in-form: false
+    - display-in-report: false
+    - display-label: Supplier ID
+    - semantic-type: identifier
+  - SUPPLIER_CODE
+    - description: Unique business reference code for the vendor (e.g., SUP-001).
+    - display-label: Supplier Code
+    - primary-display-column: false
+    - search-facet: text-search
+    - semantic-type: code
+    - value-required: true
+  - SUPPLIER_NAME
+    - description: Legal registered trade name of the supplier.
+    - display-label: Supplier Name
+    - primary-display-column: true
+    - search-facet: text-search
+    - semantic-type: name
+    - value-required: true
+  - COUNTRY_CODE
+    - ai-context: ISO 3-character alpha country code (e.g. USA, DEU, JPN, GBR).
+    - description: Country of incorporation or primary operation.
+    - display-as-lov: select-list
+    - display-label: Country
+    - search-facet: distinct-list
+    - semantic-type: country_code
+    - value-required: true
+  - REGION_NAME
+    - ai-context: Geographic operating theatre such as North America, EMEA, APAC, LATAM.
+    - description: Global economic region.
+    - display-as-lov: select-list
+    - display-label: Region
+    - search-facet: distinct-list
+    - semantic-type: text
+  - ESG_RATING
+    - ai-context: Valid ESG ratings are Tier A (Leader), Tier B (Compliant), Tier C (Moderate Risk), Tier D (High Risk), Tier F (Non-Compliant).
+    - description: Overall sustainability and corporate governance tier.
+    - display-as-lov: radio-group
+    - display-label: ESG Tier
+    - search-facet: distinct-list
+    - semantic-type: status
+    - value-required: true
+  - CARBON_INTENSITY_SCORE
+    - ai-context: Normalized carbon score from 0.00 (Zero Carbon) to 100.00 (High Emissions Intensity).
+    - description: Normalized carbon intensity rating.
+    - display-label: Carbon Score (0-100)
+    - search-facet: range
+    - semantic-type: number
+  - FINANCIAL_RISK_INDEX
+    - ai-context: Composite financial health rating: Low, Medium, High, Critical.
+    - description: Financial solvency and credit risk classification.
+    - display-as-lov: select-list
+    - display-label: Financial Risk
+    - search-facet: distinct-list
+    - semantic-type: status
+    - value-required: true
+  - AUDIT_STATUS
+    - ai-context: Values: Compliant, Pending Audit, In Review, Non-Compliant, Exempt.
+    - description: Current compliance audit lifecycle status.
+    - display-as-lov: select-list
+    - display-label: Audit Status
+    - search-facet: distinct-list
+    - semantic-type: status
+    - value-required: true
+  - PRIMARY_CONTACT_NAME
+    - description: Full name of primary account representative.
+    - display-label: Contact Name
+    - semantic-type: name
+  - PRIMARY_CONTACT_EMAIL
+    - description: Email address for audit notices and RFPs.
+    - display-label: Contact Email
+    - semantic-type: email_address
+  - CONTRACT_VALUE
+    - description: Annual active procurement contract spend with this supplier in USD.
+    - display-label: Annual Spend (USD)
+    - semantic-type: currency
+  - LAST_AUDIT_DATE
+    - description: Calendar date of most recently completed ESG verification audit.
+    - display-label: Last Audited
+    - semantic-type: date
+  - NEXT_AUDIT_DUE_DATE
+    - description: Calendar deadline for next mandated ESG submission.
+    - display-label: Next Audit Due
+    - semantic-type: date
+
+---
+
+# Table: ESG_SUPPLIER_AUDITS
+
+## Columns:
+  - AUDIT_ID - NUMBER NOT NULL [pk]
+  - SUPPLIER_ID - NUMBER NOT NULL [fk]
+  - AUDIT_YEAR - NUMBER(4) NOT NULL
+  - AUDIT_TYPE - VARCHAR2(50) NOT NULL
+  - AUDIT_DATE - DATE NOT NULL
+  - AUDITOR_USER_ID - NUMBER [fk]
+  - SCOPE_1_EMISSIONS - NUMBER(12,2)
+  - SCOPE_2_EMISSIONS - NUMBER(12,2)
+  - SCOPE_3_EMISSIONS - NUMBER(12,2)
+  - TOTAL_CARBON_TONNES - NUMBER(12,2)
+  - RENEWABLE_ENERGY_PCT - NUMBER(5,2)
+  - WASTE_DIVERSION_PCT - NUMBER(5,2)
+  - WATER_CONSUMPTION_KL - NUMBER(12,2)
+  - AUDIT_RESULT - VARCHAR2(30) NOT NULL
+  - AUDIT_COMMENTS - VARCHAR2(4000)
+  - CREATED_AT - TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+  - CREATED_BY - VARCHAR2(255) NOT NULL
+
+## Column Display Attributes:
+  - AUDIT_ID
+    - description: Surrogate key for audit log record.
+    - display-in-form: false
+    - display-in-report: false
+    - display-label: Audit ID
+    - semantic-type: identifier
+  - SUPPLIER_ID
+    - description: Foreign key reference to the audited supplier.
+    - display-as-lov: select-list
+    - display-label: Supplier
+    - semantic-type: identifier
+    - value-required: true
+  - AUDIT_YEAR
+    - ai-context: 4-digit calendar year (e.g. 2024, 2025, 2026).
+    - description: Compliance reporting period year.
+    - display-label: Audit Year
+    - search-facet: distinct-list
+    - semantic-type: number
+    - value-required: true
+  - AUDIT_TYPE
+    - ai-context: Values: Annual CSRD Full Audit, Scope 3 Baseline, Site Inspection, Carbon Re-assessment.
+    - description: Classification of ESG audit methodology.
+    - display-as-lov: select-list
+    - display-label: Audit Type
+    - search-facet: distinct-list
+    - semantic-type: text
+    - value-required: true
+  - SCOPE_1_EMISSIONS
+    - description: Direct greenhouse gas emissions from owned or controlled sources (Metric Tonnes CO2e).
+    - display-label: Scope 1 (MT CO2e)
+    - semantic-type: number
+  - SCOPE_2_EMISSIONS
+    - description: Indirect emissions from generation of purchased electricity, steam, heating, and cooling.
+    - display-label: Scope 2 (MT CO2e)
+    - semantic-type: number
+  - SCOPE_3_EMISSIONS
+    - description: All indirect emissions occurring in upstream and downstream supply chain activities.
+    - display-label: Scope 3 (MT CO2e)
+    - semantic-type: number
+  - TOTAL_CARBON_TONNES
+    - description: Total aggregated greenhouse gas emissions across Scopes 1-3.
+    - display-label: Total CO2e (Tonnes)
+    - semantic-type: number
+  - RENEWABLE_ENERGY_PCT
+    - description: Percentage of operational energy sourced from renewable origins (0-100%).
+    - display-label: Renewable Energy %
+    - semantic-type: percentage
+  - AUDIT_RESULT
+    - ai-context: Values: Certified Approved, Conditional Pass, Corrective Action Required, Failed.
+    - description: Official outcome of sustainability assessment.
+    - display-as-lov: select-list
+    - display-label: Audit Outcome
+    - search-facet: distinct-list
+    - semantic-type: status
+    - value-required: true
+
+---
+
+# Table: ESG_RISK_ALERTS
+
+## Columns:
+  - ALERT_ID - NUMBER NOT NULL [pk]
+  - SUPPLIER_ID - NUMBER NOT NULL [fk]
+  - ALERT_TITLE - VARCHAR2(250) NOT NULL
+  - ALERT_CATEGORY - VARCHAR2(50) NOT NULL
+  - SEVERITY_LEVEL - VARCHAR2(20) NOT NULL
+  - DETECTED_DATE - DATE NOT NULL
+  - STATUS - VARCHAR2(30) NOT NULL
+  - IMPACT_SUMMARY - VARCHAR2(4000)
+  - MITIGATION_PLAN - VARCHAR2(4000)
+  - ASSIGNED_INVESTIGATOR - VARCHAR2(150)
+  - RESOLUTION_DUE_DATE - DATE
+  - CREATED_AT - TIMESTAMP WITH LOCAL TIME ZONE NOT NULL
+  - CREATED_BY - VARCHAR2(255) NOT NULL
+
+## Column Display Attributes:
+  - ALERT_ID
+    - description: Primary identifier for risk anomaly event.
+    - display-in-form: false
+    - display-in-report: false
+    - display-label: Alert ID
+    - semantic-type: identifier
+  - SUPPLIER_ID
+    - description: Impacted supplier reference.
+    - display-as-lov: select-list
+    - display-label: Supplier
+    - semantic-type: identifier
+    - value-required: true
+  - ALERT_TITLE
+    - description: Concise headline of risk event or detected violation.
+    - display-label: Alert Headline
+    - primary-display-column: true
+    - search-facet: text-search
+    - semantic-type: text
+    - value-required: true
+  - ALERT_CATEGORY
+    - ai-context: Values: Carbon Compliance Breach, Labor Standards Violation, Financial Solvency Risk, Geopolitical Sanction, Quality Defect.
+    - description: Categorical classification of the risk factor.
+    - display-as-lov: select-list
+    - display-label: Risk Category
+    - search-facet: distinct-list
+    - semantic-type: text
+    - value-required: true
+  - SEVERITY_LEVEL
+    - ai-context: Critical (Requires immediate stop-work or executive escalation), High, Medium, Low.
+    - description: Severity tier of the operational impact.
+    - display-as-lov: radio-group
+    - display-label: Severity
+    - search-facet: distinct-list
+    - semantic-type: status
+    - value-required: true
+  - STATUS
+    - ai-context: Values: Open, Under Investigation, Mitigation In Progress, Resolved, Closed.
+    - description: Lifecycle resolution status of the alert.
+    - display-as-lov: select-list
+    - display-label: Alert Status
+    - search-facet: distinct-list
+    - semantic-type: status
+    - value-required: true
+  - MITIGATION_PLAN
+    - description: Detailed remedial actions mandated to resolve the non-compliance.
+    - display-label: Mitigation Action Plan
+    - semantic-type: text
