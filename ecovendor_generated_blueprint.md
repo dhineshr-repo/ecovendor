@@ -1,49 +1,51 @@
+# Provenance
+- Source Prompt: blueprint_prompt.md (v26.1.220)
+- Functional Requirements: ecovendor_functional_spec.md
+- Schema Metadata: ecovendor_schema_metadata.md
+- UX Patterns: Built-in
 # Application Definition
 - Name: EcoVendor - ESG & Supplier Risk Hub
-- Application Type: Enterprise
-- Description: Enterprise application for monitoring supplier risk, Scope 1-3 carbon emissions, regulatory audit compliance, and real-time anomaly alerts.
-- Theme: Redwood Light
-- Authentication Scheme: Database Accounts
-- Access Control:
-  - Role: Administrator
-    - Description: Full administrative access to all application settings, users, and data management.
-  - Role: Sustainability Manager
-    - Description: Manages ESG audits, carbon accounting baselines, and environmental rating assignments.
-  - Role: Procurement Officer
-    - Description: Manages supplier directory, contract values, operational contacts, and audit requests.
-  - Role: Auditor
-    - Description: Creates and updates audit reports, inspection outcomes, and compliance findings.
-  - Role: Executive Viewer
-    - Description: Read-only access to executive dashboards, supplier analytics, and risk feeds.
-- Application Settings:
-  - Setting
-    - Name: APP_COMPANY_NAME
-    - Value: EcoVendor Global Enterprises
-  - Setting
-    - Name: DEFAULT_PAGE_MODE
-    - Value: STANDARD
-  - Setting
-    - Name: ALERT_REFRESH_INTERVAL_SECONDS
-    - Value: 300
-- Lists of Values:
+- Description: Enterprise ESG compliance, Scope 1-3 carbon accounting, and supplier risk scoring hub.
+- Comments: Supports role-scoped sustainability management, supplier audit logging, GHG reporting, and exception remediation workflows.
+- Primary Application Language: en
+- Home Page: Page 1
+- Access Controls:
+  - Roles:
+    - Role: Administrator
+      - Description: Full administration rights, user management, and lookup configuration.
+    - Role: Sustainability Manager
+      - Description: ESG audits, emissions accounting, and sustainability goals.
+    - Role: Procurement Officer
+      - Description: Supplier relationship management, contracts, and vendor onboarding.
+    - Role: Auditor
+      - Description: Third-party verification and compliance review.
+    - Role: Executive Viewer
+      - Description: Read-only access to executive dashboards and sustainability analytics.
+- List of Values:
+  - LOV
+    - Name: LOV_ESG_SUPPLIERS
+    - Type: Table
+    - Table Name: ESG_SUPPLIERS
+    - Display: SUPPLIER_NAME
+    - Return: ID
   - LOV
     - Name: LOV_SUPPLIERS_ESG_RATING
     - Type: Static
     - Entries:
       - Entry:
-        - Display: Tier A (Leader)
+        - Display: Tier A - Excellent
         - Return: A
       - Entry:
-        - Display: Tier B (Compliant)
+        - Display: Tier B - Good
         - Return: B
       - Entry:
-        - Display: Tier C (Needs Attention)
+        - Display: Tier C - Moderate
         - Return: C
       - Entry:
-        - Display: Tier D (High Risk)
+        - Display: Tier D - Poor
         - Return: D
       - Entry:
-        - Display: Tier F (Non-Compliant)
+        - Display: Tier F - Non-Compliant
         - Return: F
   - LOV
     - Name: LOV_SUPPLIERS_FINANCIAL_RISK_INDEX
@@ -51,63 +53,54 @@
     - Entries:
       - Entry:
         - Display: Low Risk
-        - Return: LOW
+        - Return: Low
       - Entry:
         - Display: Medium Risk
-        - Return: MEDIUM
+        - Return: Medium
       - Entry:
         - Display: High Risk
-        - Return: HIGH
-      - Entry:
-        - Display: Critical
-        - Return: CRITICAL
+        - Return: High
   - LOV
     - Name: LOV_SUPPLIERS_AUDIT_STATUS
     - Type: Static
     - Entries:
       - Entry:
         - Display: Compliant
-        - Return: COMPLIANT
+        - Return: Compliant
       - Entry:
         - Display: Pending Audit
-        - Return: PENDING_AUDIT
-      - Entry:
-        - Display: Under Review
-        - Return: UNDER_REVIEW
+        - Return: Pending_Audit
       - Entry:
         - Display: Non-Compliant
-        - Return: NON_COMPLIANT
+        - Return: Non_Compliant
   - LOV
     - Name: LOV_SUPPLIER_AUDITS_AUDIT_TYPE
     - Type: Static
     - Entries:
       - Entry:
-        - Display: Annual Comprehensive
-        - Return: ANNUAL_COMPREHENSIVE
+        - Display: CSRD Annual Review
+        - Return: CSRD_ANNUAL
       - Entry:
-        - Display: Scope 3 Carbon Verification
-        - Return: SCOPE3_CARBON
+        - Display: Carbon Scope 1-3 Audit
+        - Return: CARBON_SCOPE3
       - Entry:
         - Display: Labor & Human Rights
         - Return: LABOR_RIGHTS
       - Entry:
-        - Display: Waste & Circularity
-        - Return: WASTE_CIRCULARITY
-      - Entry:
-        - Display: Ad-hoc Risk Review
-        - Return: AD_HOC_REVIEW
+        - Display: Circular Economy & Waste
+        - Return: CIRCULAR_ECONOMY
   - LOV
     - Name: LOV_SUPPLIER_AUDITS_AUDIT_OUTCOME
     - Type: Static
     - Entries:
       - Entry:
-        - Display: Passed
-        - Return: PASSED
+        - Display: Certified
+        - Return: CERTIFIED
       - Entry:
         - Display: Conditional Pass
-        - Return: CONDITIONAL_PASS
+        - Return: CONDITIONAL
       - Entry:
-        - Display: Action Plan Required
+        - Display: Action Required
         - Return: ACTION_REQUIRED
       - Entry:
         - Display: Failed
@@ -117,23 +110,23 @@
     - Type: Static
     - Entries:
       - Entry:
-        - Display: Critical
+        - Display: Critical Urgency
         - Return: CRITICAL
       - Entry:
-        - Display: High
+        - Display: High Severity
         - Return: HIGH
       - Entry:
-        - Display: Medium
+        - Display: Medium Severity
         - Return: MEDIUM
       - Entry:
-        - Display: Low
+        - Display: Low Advisory
         - Return: LOW
   - LOV
     - Name: LOV_RISK_ALERTS_RESOLUTION_STATUS
     - Type: Static
     - Entries:
       - Entry:
-        - Display: Open
+        - Display: Open & Unassigned
         - Return: OPEN
       - Entry:
         - Display: Under Investigation
@@ -142,65 +135,50 @@
         - Display: Remediation In Progress
         - Return: REMEDIATING
       - Entry:
-        - Display: Resolved
+        - Display: Resolved & Closed
         - Return: RESOLVED
-      - Entry:
-        - Display: Dismissed
-        - Return: DISMISSED
 - Page Groups:
-  - Page Group
-    - Name: Home
-    - Description: Executive summary dashboards and high-level KPI overviews.
-  - Page Group
-    - Name: Supplier Risk & Directory
-    - Description: Supplier master registry, multi-attribute faceted search, and profile management.
-  - Page Group
-    - Name: ESG & Carbon Accounting
-    - Description: Scope 1-3 greenhouse gas emissions, renewable energy share, and audit history.
-  - Page Group
-    - Name: Risk & Compliance Feed
-    - Description: Real-time supply chain disruption, financial risk, and ESG exception alert streams.
-  - Page Group
-    - Name: Administration
-    - Description: User access control, application configuration, and system lookup management.
+  - Page Group: Home
+    - Description: Landing dashboard and executive KPIs.
+  - Page Group: Supplier Directory
+    - Description: Supplier master data, risk classification, and profile forms.
+  - Page Group: ESG & Carbon Audits
+    - Description: Greenhouse gas disclosures, Scope 1-3 metrics, and audit reviews.
+  - Page Group: Risk & Alerts Feed
+    - Description: AI anomaly intelligence and exception mitigation workflows.
 - Menu:
-  - Menu Name: Navigation Menu
-  - Entries:
-    - Entry
-      - Label: Executive Dashboard
-      - Icon: fa-dashboard
-      - Action: Navigate
-      - Target: Page 1
-      - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer, Auditor, Executive Viewer
-    - Entry
-      - Label: Supplier Directory
-      - Icon: fa-building
-      - Action: Navigate
-      - Target: Page 2
-      - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer, Auditor, Executive Viewer
-    - Entry
-      - Label: ESG & Carbon Audits
-      - Icon: fa-leaf
-      - Action: Navigate
-      - Target: Page 4
-      - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer, Auditor, Executive Viewer
-    - Entry
-      - Label: Risk Alerts Feed
-      - Icon: fa-exclamation-triangle
-      - Action: Navigate
-      - Target: Page 6
-      - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer, Auditor, Executive Viewer
-    - Entry
-      - Label: System Administration
-      - Icon: fa-cogs
-      - Action: Navigate
-      - Target: Page 9
-      - Authorized Roles: Administrator
-
+  - Menu Entry:
+    - Label: Executive Dashboard
+    - Icon: fa-dashboard
+    - Action: Navigate
+    - Target: Page 1
+    - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer, Auditor, Executive Viewer
+    - Description: High-level KPI cards and ESG distributions.
+  - Menu Entry:
+    - Label: Supplier Directory
+    - Icon: fa-building
+    - Action: Navigate
+    - Target: Page 2
+    - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer, Auditor, Executive Viewer
+    - Description: Searchable supplier directory and risk scoring.
+  - Menu Entry:
+    - Label: ESG & Carbon Audits
+    - Icon: fa-leaf
+    - Action: Navigate
+    - Target: Page 4
+    - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer, Auditor, Executive Viewer
+    - Description: Multi-year Scope 1-3 carbon accounting and audit reports.
+  - Menu Entry:
+    - Label: Risk Alerts Feed
+    - Icon: fa-exclamation-triangle
+    - Action: Navigate
+    - Target: Page 6
+    - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer, Auditor, Executive Viewer
+    - Description: Real-time supply chain exception stream and mitigation.
 ## Pages
 ### Page 1: Executive Dashboard
-- Description: Executive ESG & Supplier Risk command center displaying high-level metrics, risk distribution, and urgent alert activity.
-- Comments: Executive landing page for CPO, CSO, and procurement leadership.
+- Description: Executive sustainability overview, carbon benchmarks, and active alerts.
+- Comments: Summarizes supplier compliance, average carbon intensity, and risk alerts for role-scoped users.
 - Pattern: metric-chart-two-up
 - Page Mode: standard
 - Menu: true
@@ -208,13 +186,14 @@
 - Security Requirements:
   - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer, Auditor, Executive Viewer
 #### Regions
-##### Region: Total Active Suppliers KPI
+##### Region: Total Suppliers KPI
+- Comments: Summarizes total registered enterprise suppliers.
 - Position: body
 - Colstart: 1
 - Colspan: 3
 - Component:
   - Component Type: Metric Card
-- Metric Subtitle: Total monitored suppliers
+- Metric Subtitle: Active suppliers in directory
 - Metric Icon: fa-building
 - Metric Icon Style: subtle
 - Data Source:
@@ -222,272 +201,681 @@
   - SQL:
 ```sql
 select count(*) as value
-  from ECO_SUPPLIERS
- where AUDIT_STATUS != 'NON_COMPLIANT'
+from ESG_SUPPLIERS
 ```
+  - Summary: Total count of active enterprise suppliers.
+- Columns:
+  - Column Name: value
+    - Label: Active Suppliers
+    - Datatype: number
+    - Render As: metric
+    - Visible: true
+    - Format Mask: 999G999G999G990
 ##### Region: High Risk Suppliers KPI
+- Comments: Count of suppliers with High risk or Tier D/F ratings.
 - Position: body
 - Colstart: 4
 - Colspan: 3
 - Component:
   - Component Type: Metric Card
-- Metric Subtitle: Financial & ESG risk tier D/F
-- Metric Icon: fa-warning
-- Metric Icon Style: danger
+- Metric Subtitle: High risk or Tier D/F
+- Metric Icon: fa-exclamation-circle
+- Metric Icon Style: subtle
 - Data Source:
   - Type: SQL
   - SQL:
 ```sql
 select count(*) as value
-  from ECO_SUPPLIERS
- where FINANCIAL_RISK_INDEX in ('HIGH', 'CRITICAL')
-    or ESG_RATING in ('D', 'F')
+from ESG_SUPPLIERS
+where ESG_RATING in ('D', 'F') or FINANCIAL_RISK_INDEX = 'High'
 ```
+  - Summary: Total count of high-risk suppliers.
+- Columns:
+  - Column Name: value
+    - Label: High Risk Suppliers
+    - Datatype: number
+    - Render As: metric
+    - Visible: true
+    - Format Mask: 999G999G999G990
 ##### Region: Avg Carbon Intensity KPI
+- Comments: Average carbon intensity score across all active suppliers.
 - Position: body
 - Colstart: 7
 - Colspan: 3
 - Component:
   - Component Type: Metric Card
-- Metric Subtitle: Benchmark score (0-100 scale)
+- Metric Subtitle: Average carbon score (0-100)
 - Metric Icon: fa-leaf
-- Metric Icon Style: success
+- Metric Icon Style: subtle
 - Data Source:
   - Type: SQL
   - SQL:
 ```sql
-select round(avg(CARBON_INTENSITY_SCORE), 1) as value
-  from ECO_SUPPLIERS
+select nvl(round(avg(CARBON_INTENSITY_SCORE), 1), 0) as value
+from ESG_SUPPLIERS
 ```
+  - Summary: Portfolio-wide average carbon intensity.
+- Columns:
+  - Column Name: value
+    - Label: Avg Carbon Score
+    - Datatype: number
+    - Render As: metric
+    - Visible: true
+    - Format Mask: 990D0
 ##### Region: Open Critical Alerts KPI
+- Comments: Number of unresolved critical/high risk alerts.
 - Position: body
 - Colstart: 10
 - Colspan: 3
 - Component:
   - Component Type: Metric Card
-- Metric Subtitle: Requiring immediate mitigation
-- Metric Icon: fa-bolt
-- Metric Icon Style: warning
+- Metric Subtitle: Unresolved critical exceptions
+- Metric Icon: fa-bell
+- Metric Icon Style: subtle
 - Data Source:
   - Type: SQL
   - SQL:
 ```sql
 select count(*) as value
-  from ECO_RISK_ALERTS
- where RESOLUTION_STATUS in ('OPEN', 'INVESTIGATING')
-   and ALERT_SEVERITY in ('HIGH', 'CRITICAL')
+from ESG_RISK_ALERTS
+where RESOLUTION_STATUS in ('OPEN', 'INVESTIGATING')
 ```
-##### Region: Suppliers by ESG Rating
+  - Summary: Total open unresolved risk alerts.
+- Columns:
+  - Column Name: value
+    - Label: Active Alerts
+    - Datatype: number
+    - Render As: metric
+    - Visible: true
+    - Format Mask: 999G999G999G990
+##### Region: Suppliers by ESG Rating Chart
+- Comments: Distribution of suppliers grouped by ESG letter tier.
 - Position: body
 - Colstart: 1
 - Colspan: 6
 - Component:
-  - Component Type: Donut Chart
-- Chart Title: Distribution by ESG Rating Tier
+  - Component Type: Chart
+  - Qualifier: Donut
 - Data Source:
   - Type: SQL
   - SQL:
 ```sql
-select ESG_RATING, count(*) as SUPPLIER_COUNT
-  from ECO_SUPPLIERS
- group by ESG_RATING
- order by ESG_RATING
+select ESG_RATING as label
+     , count(*) as value
+from ESG_SUPPLIERS
+group by ESG_RATING
+order by ESG_RATING asc
 ```
-##### Region: Average Carbon Score by Country
+  - Summary: Supplier distribution across ESG ratings.
+- Columns:
+  - Column Name: label
+    - Label: ESG Rating
+    - Datatype: varchar2
+    - Render As: label
+  - Column Name: value
+    - Label: Count
+    - Datatype: number
+    - Render As: value
+##### Region: Average Carbon Score by Country Chart
+- Comments: Average carbon intensity score grouped by supplier country.
 - Position: body
 - Colstart: 7
 - Colspan: 6
 - Component:
-  - Component Type: Bar Chart
-- Chart Title: Carbon Intensity Benchmark by Country
+  - Component Type: Chart
+  - Qualifier: Bar
 - Data Source:
   - Type: SQL
   - SQL:
 ```sql
-select COUNTRY, round(avg(CARBON_INTENSITY_SCORE), 1) as AVG_CARBON_SCORE
-  from ECO_SUPPLIERS
- group by COUNTRY
- order by AVG_CARBON_SCORE desc
+select COUNTRY as label
+     , round(avg(CARBON_INTENSITY_SCORE), 1) as value
+from ESG_SUPPLIERS
+group by COUNTRY
+order by value desc
 ```
-
-### Page 2: Supplier Directory & Risk Scoring
-- Description: Multi-faceted directory allowing procurement teams to filter suppliers by country, ESG tier, risk index, and audit status.
-- Pattern: faceted-search-report
+  - Summary: Average carbon intensity by country.
+- Columns:
+  - Column Name: label
+    - Label: Country
+    - Datatype: varchar2
+    - Render As: label
+  - Column Name: value
+    - Label: Avg Carbon Score
+    - Datatype: number
+    - Render As: value
+### Page 2: Supplier Directory
+- Description: Search and review enterprise supplier directory with ESG compliance metrics.
+- Comments: Searchable supplier directory with filtering and quick navigation to audit forms.
+- Pattern: standard-report
 - Page Mode: standard
 - Menu: true
-- Page Group: Supplier Risk & Directory
+- Page Group: Supplier Directory
 - Security Requirements:
   - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer, Auditor, Executive Viewer
 #### Regions
-##### Region: Supplier Facets
-- Position: left
-- Colstart: 1
-- Colspan: 3
-- Component:
-  - Component Type: Facet Filter
-- Facets:
-  - Facet: Country
-    - Type: Checkbox Group
-    - Source Column: COUNTRY
-  - Facet: ESG Rating
-    - Type: Checkbox Group
-    - Source Column: ESG_RATING
-  - Facet: Financial Risk
-    - Type: Radio Group
-    - Source Column: FINANCIAL_RISK_INDEX
-  - Facet: Audit Status
-    - Type: Checkbox Group
-    - Source Column: AUDIT_STATUS
-##### Region: Suppliers Search Results
+##### Region: Suppliers Directory Report
+- Comments: Interactive report displaying all suppliers with risk ratings and carbon scores.
 - Position: body
-- Colstart: 4
-- Colspan: 9
+- Colstart: 1
+- Colspan: 12
 - Component:
   - Component Type: Interactive Report
+- Report Context: Enterprise supplier directory with risk scores, CSRD status, and audit dates.
 - Data Source:
   - Type: Table
-  - Table: ECO_SUPPLIERS
-- Actions:
-  - Action: Create Supplier
-    - Target: Page 3
-    - Mode: Create
-  - Action: Edit Row Link
-    - Target: Page 3
-    - Parameter Mapping:
-      - P3_ID: ID
-
-### Page 3: Supplier Profile & Remediation
-- Description: Drawer modal for inspecting supplier details, modifying risk parameters, and managing audit remediation plans.
-- Pattern: slide-out-drawer-form
-- Page Mode: drawerModal
-- Page Group: Supplier Risk & Directory
+  - Name: ESG_SUPPLIERS
+  - Primary Keys: ID
+  - Summary: Interactive report over ESG_SUPPLIERS table records.
+- Columns:
+  - Column Name: ID
+    - Label: ID
+    - Datatype: number
+    - Render As: hidden
+    - Visible: false
+  - Column Name: SUPPLIER_NAME
+    - Label: Supplier Name
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+    - Link:
+      - Target: Page 3
+      - Set Parameters:
+        - Parameter:
+          - Name: P3_ID
+          - Value: ID
+  - Column Name: SUPPLIER_CODE
+    - Label: Supplier Code
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+  - Column Name: COUNTRY
+    - Label: Country
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+  - Column Name: ESG_RATING
+    - Label: ESG Rating
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+    - LOV: LOV_SUPPLIERS_ESG_RATING
+  - Column Name: CARBON_INTENSITY_SCORE
+    - Label: Carbon Score
+    - Datatype: number
+    - Render As: plainText
+    - Visible: true
+    - Format Mask: 990D0
+  - Column Name: FINANCIAL_RISK_INDEX
+    - Label: Financial Risk
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+    - LOV: LOV_SUPPLIERS_FINANCIAL_RISK_INDEX
+  - Column Name: AUDIT_STATUS
+    - Label: Audit Status
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+    - LOV: LOV_SUPPLIERS_AUDIT_STATUS
+  - Column Name: PRIMARY_CONTACT_EMAIL
+    - Label: Contact Email
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+  - Column Name: CONTRACT_VALUE
+    - Label: Contract Value
+    - Datatype: number
+    - Render As: plainText
+    - Visible: true
+    - Format Mask: FML999G999G999D00
+  - Column Name: LAST_AUDIT_DATE
+    - Label: Last Audit Date
+    - Datatype: date
+    - Render As: plainText
+    - Visible: true
+    - Format Mask: DS
+### Page 3: Supplier Profile Detail
+- Description: View and edit supplier master attributes, ESG ratings, and mitigation notes.
+- Comments: Standard modal dialog form for supplier maintenance and audit updates.
+- Pattern: standard-form
+- Page Mode: modalDialog
+- Menu: false
+- Page Group: Supplier Directory
 - Security Requirements:
   - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer
 #### Regions
-##### Region: Supplier Form
+##### Region: Supplier Profile Form
+- Comments: Modal form for maintaining supplier ESG and contact details.
 - Position: body
 - Colstart: 1
 - Colspan: 12
 - Component:
   - Component Type: Form
-- Target Table: ECO_SUPPLIERS
-- Primary Key: ID
-- Items:
-  - Item: P3_ID (hidden)
-  - Item: P3_SUPPLIER_NAME (text, required)
-  - Item: P3_SUPPLIER_CODE (text, required)
-  - Item: P3_COUNTRY (selectList, LOV: LOV_COUNTRIES)
-  - Item: P3_ESG_RATING (selectList, LOV: LOV_SUPPLIERS_ESG_RATING)
-  - Item: P3_CARBON_INTENSITY_SCORE (number)
-  - Item: P3_FINANCIAL_RISK_INDEX (selectList, LOV: LOV_SUPPLIERS_FINANCIAL_RISK_INDEX)
-  - Item: P3_AUDIT_STATUS (selectList, LOV: LOV_SUPPLIERS_AUDIT_STATUS)
-  - Item: P3_PRIMARY_CONTACT_EMAIL (text)
-  - Item: P3_CONTRACT_VALUE (number, format: FML999G999G999D00)
-  - Item: P3_MITIGATION_PLAN (textarea, dynamic visibility when ESG_RATING in ('D', 'F'))
-
-### Page 4: ESG & Carbon Audits Hub
-- Description: Multi-year greenhouse gas carbon accounting (Scope 1, 2, and 3) and regulatory audit verification records.
-- Pattern: interactive-report
-- Page Mode: standard
-- Menu: true
-- Page Group: ESG & Carbon Accounting
-- Security Requirements:
-  - Authorized Roles: Administrator, Sustainability Manager, Auditor, Executive Viewer
-#### Regions
-##### Region: Carbon Audits Report
-- Position: body
-- Colstart: 1
-- Colspan: 12
-- Component:
-  - Component Type: Interactive Report
 - Data Source:
-  - Type: SQL
-  - SQL:
-```sql
-select a.ID,
-       s.SUPPLIER_NAME,
-       a.AUDIT_YEAR,
-       a.AUDIT_TYPE,
-       a.SCOPE1_CO2_TONNES,
-       a.SCOPE2_CO2_TONNES,
-       a.SCOPE3_CO2_TONNES,
-       (a.SCOPE1_CO2_TONNES + a.SCOPE2_CO2_TONNES + a.SCOPE3_CO2_TONNES) as TOTAL_CO2_TONNES,
-       a.RENEWABLE_ENERGY_PCT,
-       a.AUDIT_OUTCOME,
-       a.AUDIT_DATE,
-       a.AUDITOR_NAME
-  from ECO_SUPPLIER_AUDITS a
-  join ECO_SUPPLIERS s on s.ID = a.SUPPLIER_ID
- order by a.AUDIT_YEAR desc, a.AUDIT_DATE desc
-```
-- Actions:
-  - Action: Log New Audit
-    - Target: Page 5
-    - Mode: Create
-
-### Page 5: ESG Audit Record Detail
-- Description: Standard modal form to submit annual emissions disclosures, environmental verifications, and compliance findings.
-- Pattern: modal-dialog-form
-- Page Mode: modalDialog
-- Page Group: ESG & Carbon Accounting
-- Security Requirements:
-  - Authorized Roles: Administrator, Sustainability Manager, Auditor
-
-### Page 6: Risk Alerts & Exception Stream
-- Description: Real-time supply chain disruption, financial risk anomaly, and environmental non-compliance alert feed.
-- Pattern: interactive-report-with-badges
+  - Type: Table
+  - Name: ESG_SUPPLIERS
+  - Primary Keys: ID
+  - Summary: Form source for supplier master record maintenance.
+- Columns:
+  - Column Name: ID
+    - Label: Supplier ID
+    - Datatype: number
+    - Page Item Name: P3_ID
+    - Render As: hidden
+    - Required: true
+  - Column Name: SUPPLIER_NAME
+    - Label: Supplier Name
+    - Datatype: varchar2
+    - Page Item Name: P3_SUPPLIER_NAME
+    - Render As: textField
+    - Required: true
+    - MaxLength: 100
+  - Column Name: SUPPLIER_CODE
+    - Label: Supplier Code
+    - Datatype: varchar2
+    - Page Item Name: P3_SUPPLIER_CODE
+    - Render As: textField
+    - Required: true
+    - MaxLength: 20
+  - Column Name: COUNTRY
+    - Label: Country
+    - Datatype: varchar2
+    - Page Item Name: P3_COUNTRY
+    - Render As: textField
+    - Required: false
+    - MaxLength: 50
+  - Column Name: ESG_RATING
+    - Label: ESG Rating
+    - Datatype: varchar2
+    - Page Item Name: P3_ESG_RATING
+    - Render As: selectList
+    - LOV: LOV_SUPPLIERS_ESG_RATING
+    - Required: true
+  - Column Name: CARBON_INTENSITY_SCORE
+    - Label: Carbon Intensity Score (0-100)
+    - Datatype: number
+    - Page Item Name: P3_CARBON_INTENSITY_SCORE
+    - Render As: numberField
+    - Required: true
+  - Column Name: FINANCIAL_RISK_INDEX
+    - Label: Financial Risk Index
+    - Datatype: varchar2
+    - Page Item Name: P3_FINANCIAL_RISK_INDEX
+    - Render As: selectList
+    - LOV: LOV_SUPPLIERS_FINANCIAL_RISK_INDEX
+    - Required: true
+  - Column Name: AUDIT_STATUS
+    - Label: Audit Status
+    - Datatype: varchar2
+    - Page Item Name: P3_AUDIT_STATUS
+    - Render As: selectList
+    - LOV: LOV_SUPPLIERS_AUDIT_STATUS
+    - Required: true
+  - Column Name: PRIMARY_CONTACT_EMAIL
+    - Label: Primary Contact Email
+    - Datatype: varchar2
+    - Page Item Name: P3_PRIMARY_CONTACT_EMAIL
+    - Render As: textField
+    - Required: false
+    - MaxLength: 100
+  - Column Name: CONTRACT_VALUE
+    - Label: Contract Value
+    - Datatype: number
+    - Page Item Name: P3_CONTRACT_VALUE
+    - Render As: numberField
+    - Required: false
+  - Column Name: LAST_AUDIT_DATE
+    - Label: Last Audit Date
+    - Datatype: date
+    - Page Item Name: P3_LAST_AUDIT_DATE
+    - Render As: datePicker
+    - Required: false
+  - Column Name: ESG_SUMMARY_NOTES
+    - Label: ESG Remediation & Summary Notes
+    - Datatype: clob
+    - Page Item Name: P3_ESG_SUMMARY_NOTES
+    - Render As: textArea
+    - Required: false
+### Page 4: ESG & Carbon Audits Hub
+- Description: Multi-year greenhouse gas disclosures, Scope 1, 2, and 3 emissions logs.
+- Comments: Audit directory for historical sustainability verification.
+- Pattern: standard-report
 - Page Mode: standard
 - Menu: true
-- Page Group: Risk & Compliance Feed
+- Page Group: ESG & Carbon Audits
 - Security Requirements:
   - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer, Auditor, Executive Viewer
 #### Regions
-##### Region: Anomaly Alerts Feed
+##### Region: Carbon Audits Report
+- Comments: Interactive report displaying all supplier ESG audits and carbon tonnages.
 - Position: body
 - Colstart: 1
 - Colspan: 12
 - Component:
   - Component Type: Interactive Report
+- Report Context: Multi-year Scope 1-3 greenhouse gas disclosures and audit outcomes.
 - Data Source:
-  - Type: SQL
-  - SQL:
-```sql
-select r.ID,
-       s.SUPPLIER_NAME,
-       r.ALERT_TYPE,
-       r.ALERT_SEVERITY,
-       r.ALERT_TITLE,
-       r.ALERT_DESCRIPTION,
-       r.RESOLUTION_STATUS,
-       r.DETECTED_DATE,
-       r.AI_CONFIDENCE_SCORE
-  from ECO_RISK_ALERTS r
-  join ECO_SUPPLIERS s on s.ID = r.SUPPLIER_ID
- order by r.DETECTED_DATE desc
-```
-
-### Page 7: Risk Alert Remediation
-- Description: Modal dialog for acknowledging alerts, escalating investigations, and closing risk anomalies with root-cause notes.
-- Pattern: modal-dialog-form
+  - Type: Table
+  - Name: ESG_SUPPLIER_AUDITS
+  - Primary Keys: ID
+  - Summary: Interactive report over ESG_SUPPLIER_AUDITS table records.
+- Columns:
+  - Column Name: ID
+    - Label: Audit ID
+    - Datatype: number
+    - Render As: hidden
+    - Visible: false
+  - Column Name: SUPPLIER_ID
+    - Label: Supplier
+    - Datatype: number
+    - Render As: plainText
+    - Visible: true
+    - LOV: LOV_ESG_SUPPLIERS
+    - Link:
+      - Target: Page 5
+      - Set Parameters:
+        - Parameter:
+          - Name: P5_ID
+          - Value: ID
+  - Column Name: AUDIT_YEAR
+    - Label: Year
+    - Datatype: number
+    - Render As: plainText
+    - Visible: true
+  - Column Name: AUDIT_TYPE
+    - Label: Audit Type
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+    - LOV: LOV_SUPPLIER_AUDITS_AUDIT_TYPE
+  - Column Name: SCOPE_1_EMISSIONS_MT
+    - Label: Scope 1 (MT CO2)
+    - Datatype: number
+    - Render As: plainText
+    - Visible: true
+    - Format Mask: 999G999G990D0
+  - Column Name: SCOPE_2_EMISSIONS_MT
+    - Label: Scope 2 (MT CO2)
+    - Datatype: number
+    - Render As: plainText
+    - Visible: true
+    - Format Mask: 999G999G990D0
+  - Column Name: SCOPE_3_EMISSIONS_MT
+    - Label: Scope 3 (MT CO2)
+    - Datatype: number
+    - Render As: plainText
+    - Visible: true
+    - Format Mask: 999G999G990D0
+  - Column Name: RENEWABLE_ENERGY_PCT
+    - Label: Renewable Energy %
+    - Datatype: number
+    - Render As: plainText
+    - Visible: true
+    - Format Mask: 990D0
+  - Column Name: AUDIT_OUTCOME
+    - Label: Outcome
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+    - LOV: LOV_SUPPLIER_AUDITS_AUDIT_OUTCOME
+  - Column Name: AUDITOR_NAME
+    - Label: Auditor Name
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+  - Column Name: AUDIT_COMPLETION_DATE
+    - Label: Completion Date
+    - Datatype: date
+    - Render As: plainText
+    - Visible: true
+    - Format Mask: DS
+### Page 5: ESG Audit Record Detail
+- Description: Record and verify annual supplier ESG audits and Scope 1-3 disclosures.
+- Comments: Modal dialog form for recording third-party sustainability audit findings.
+- Pattern: standard-form
 - Page Mode: modalDialog
-- Page Group: Risk & Compliance Feed
+- Menu: false
+- Page Group: ESG & Carbon Audits
+- Security Requirements:
+  - Authorized Roles: Administrator, Sustainability Manager, Auditor
+#### Regions
+##### Region: ESG Audit Form
+- Comments: Form for entering emissions metrics and certification outcome.
+- Position: body
+- Colstart: 1
+- Colspan: 12
+- Component:
+  - Component Type: Form
+- Data Source:
+  - Type: Table
+  - Name: ESG_SUPPLIER_AUDITS
+  - Primary Keys: ID
+  - Summary: Form source for supplier audit certification records.
+- Columns:
+  - Column Name: ID
+    - Label: Audit ID
+    - Datatype: number
+    - Page Item Name: P5_ID
+    - Render As: hidden
+    - Required: true
+  - Column Name: SUPPLIER_ID
+    - Label: Supplier
+    - Datatype: number
+    - Page Item Name: P5_SUPPLIER_ID
+    - Render As: selectList
+    - LOV: LOV_ESG_SUPPLIERS
+    - Required: true
+  - Column Name: AUDIT_YEAR
+    - Label: Audit Year
+    - Datatype: number
+    - Page Item Name: P5_AUDIT_YEAR
+    - Render As: numberField
+    - Required: true
+  - Column Name: AUDIT_TYPE
+    - Label: Audit Type
+    - Datatype: varchar2
+    - Page Item Name: P5_AUDIT_TYPE
+    - Render As: selectList
+    - LOV: LOV_SUPPLIER_AUDITS_AUDIT_TYPE
+    - Required: true
+  - Column Name: SCOPE_1_EMISSIONS_MT
+    - Label: Scope 1 Emissions (MT CO2)
+    - Datatype: number
+    - Page Item Name: P5_SCOPE_1_EMISSIONS_MT
+    - Render As: numberField
+    - Required: false
+  - Column Name: SCOPE_2_EMISSIONS_MT
+    - Label: Scope 2 Emissions (MT CO2)
+    - Datatype: number
+    - Page Item Name: P5_SCOPE_2_EMISSIONS_MT
+    - Render As: numberField
+    - Required: false
+  - Column Name: SCOPE_3_EMISSIONS_MT
+    - Label: Scope 3 Emissions (MT CO2)
+    - Datatype: number
+    - Page Item Name: P5_SCOPE_3_EMISSIONS_MT
+    - Render As: numberField
+    - Required: false
+  - Column Name: RENEWABLE_ENERGY_PCT
+    - Label: Renewable Energy Usage (%)
+    - Datatype: number
+    - Page Item Name: P5_RENEWABLE_ENERGY_PCT
+    - Render As: numberField
+    - Required: false
+  - Column Name: AUDIT_OUTCOME
+    - Label: Audit Outcome
+    - Datatype: varchar2
+    - Page Item Name: P5_AUDIT_OUTCOME
+    - Render As: selectList
+    - LOV: LOV_SUPPLIER_AUDITS_AUDIT_OUTCOME
+    - Required: true
+  - Column Name: AUDITOR_NAME
+    - Label: Auditor Name / Firm
+    - Datatype: varchar2
+    - Page Item Name: P5_AUDITOR_NAME
+    - Render As: textField
+    - Required: false
+    - MaxLength: 100
+  - Column Name: AUDIT_COMPLETION_DATE
+    - Label: Audit Completion Date
+    - Datatype: date
+    - Page Item Name: P5_AUDIT_COMPLETION_DATE
+    - Render As: datePicker
+    - Required: false
+  - Column Name: AUDIT_FINDINGS_SUMMARY
+    - Label: Audit Findings & CAPA Summary
+    - Datatype: clob
+    - Page Item Name: P5_AUDIT_FINDINGS_SUMMARY
+    - Render As: textArea
+    - Required: false
+### Page 6: Risk Alerts Feed
+- Description: Real-time supply chain anomaly detection and exception alerts.
+- Comments: Actionable risk feed for identifying non-compliant vendors and disruptions.
+- Pattern: standard-report
+- Page Mode: standard
+- Menu: true
+- Page Group: Risk & Alerts Feed
+- Security Requirements:
+  - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer, Auditor, Executive Viewer
+#### Regions
+##### Region: Anomaly Alerts Feed Report
+- Comments: Interactive report displaying all operational and compliance alerts.
+- Position: body
+- Colstart: 1
+- Colspan: 12
+- Component:
+  - Component Type: Interactive Report
+- Report Context: Real-time risk events with severity classification and resolution status.
+- Data Source:
+  - Type: Table
+  - Name: ESG_RISK_ALERTS
+  - Primary Keys: ID
+  - Summary: Interactive report over ESG_RISK_ALERTS table records.
+- Columns:
+  - Column Name: ID
+    - Label: Alert ID
+    - Datatype: number
+    - Render As: hidden
+    - Visible: false
+  - Column Name: SUPPLIER_ID
+    - Label: Supplier
+    - Datatype: number
+    - Render As: plainText
+    - Visible: true
+    - LOV: LOV_ESG_SUPPLIERS
+    - Link:
+      - Target: Page 7
+      - Set Parameters:
+        - Parameter:
+          - Name: P7_ID
+          - Value: ID
+  - Column Name: ALERT_TITLE
+    - Label: Alert Title
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+  - Column Name: ALERT_SEVERITY
+    - Label: Severity
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+    - LOV: LOV_RISK_ALERTS_ALERT_SEVERITY
+  - Column Name: RISK_CATEGORY
+    - Label: Risk Category
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+  - Column Name: AI_CONFIDENCE_SCORE
+    - Label: AI Confidence
+    - Datatype: number
+    - Render As: plainText
+    - Visible: true
+    - Format Mask: 990D0
+  - Column Name: RESOLUTION_STATUS
+    - Label: Status
+    - Datatype: varchar2
+    - Render As: plainText
+    - Visible: true
+    - LOV: LOV_RISK_ALERTS_RESOLUTION_STATUS
+  - Column Name: CREATED_TIMESTAMP
+    - Label: Detected At
+    - Datatype: timestamp
+    - Render As: plainText
+    - Visible: true
+### Page 7: Risk Alert Remediation
+- Description: Review root cause and record remediation actions for risk alerts.
+- Comments: Modal dialog form for risk mitigation and incident closure.
+- Pattern: standard-form
+- Page Mode: modalDialog
+- Menu: false
+- Page Group: Risk & Alerts Feed
 - Security Requirements:
   - Authorized Roles: Administrator, Sustainability Manager, Procurement Officer
-
-### Page 8: Sustainability & ESG Analytics Hub
-- Description: Deep-dive charts for multi-year Scope 3 carbon trajectories, renewable energy adoption, and ESG rating transitions.
-- Pattern: chart-analytics-grid
-- Page Mode: standard
-- Menu: true
-- Page Group: ESG & Carbon Accounting
-- Security Requirements:
-  - Authorized Roles: Administrator, Sustainability Manager, Executive Viewer
-
-### Page 9: Administration & Settings Hub
-- Description: System settings, user role assignments, audit thresholds, and controlled lookup lists.
-- Pattern: admin-dashboard
-- Page Mode: standard
-- Menu: true
-- Page Group: Administration
-- Security Requirements:
-  - Authorized Roles: Administrator
+#### Regions
+##### Region: Risk Alert Form
+- Comments: Form for acknowledging alerts and entering resolution steps.
+- Position: body
+- Colstart: 1
+- Colspan: 12
+- Component:
+  - Component Type: Form
+- Data Source:
+  - Type: Table
+  - Name: ESG_RISK_ALERTS
+  - Primary Keys: ID
+  - Summary: Form source for exception management and remediation notes.
+- Columns:
+  - Column Name: ID
+    - Label: Alert ID
+    - Datatype: number
+    - Page Item Name: P7_ID
+    - Render As: hidden
+    - Required: true
+  - Column Name: SUPPLIER_ID
+    - Label: Supplier
+    - Datatype: number
+    - Page Item Name: P7_SUPPLIER_ID
+    - Render As: selectList
+    - LOV: LOV_ESG_SUPPLIERS
+    - Required: true
+  - Column Name: ALERT_TITLE
+    - Label: Alert Title
+    - Datatype: varchar2
+    - Page Item Name: P7_ALERT_TITLE
+    - Render As: textField
+    - Required: true
+    - MaxLength: 150
+  - Column Name: ALERT_SEVERITY
+    - Label: Alert Severity
+    - Datatype: varchar2
+    - Page Item Name: P7_ALERT_SEVERITY
+    - Render As: selectList
+    - LOV: LOV_RISK_ALERTS_ALERT_SEVERITY
+    - Required: true
+  - Column Name: RISK_CATEGORY
+    - Label: Risk Category
+    - Datatype: varchar2
+    - Page Item Name: P7_RISK_CATEGORY
+    - Render As: textField
+    - Required: false
+    - MaxLength: 50
+  - Column Name: AI_CONFIDENCE_SCORE
+    - Label: AI Confidence Score (0-100)
+    - Datatype: number
+    - Page Item Name: P7_AI_CONFIDENCE_SCORE
+    - Render As: numberField
+    - Required: false
+  - Column Name: RESOLUTION_STATUS
+    - Label: Resolution Status
+    - Datatype: varchar2
+    - Page Item Name: P7_RESOLUTION_STATUS
+    - Render As: selectList
+    - LOV: LOV_RISK_ALERTS_RESOLUTION_STATUS
+    - Required: true
+  - Column Name: REMEDIATION_NOTES
+    - Label: Corrective Action & Closure Notes
+    - Datatype: clob
+    - Page Item Name: P7_REMEDIATION_NOTES
+    - Render As: textArea
+    - Required: false
