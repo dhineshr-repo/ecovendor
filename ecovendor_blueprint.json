@@ -1,0 +1,72 @@
+{
+  "application": {
+    "name": "EcoVendor - ESG & Supplier Risk Hub",
+    "appShortDescription": "Enterprise ESG Compliance, Carbon Scope 1-3 Audits & Vendor Risk Scoring",
+    "schema": "WKSP_SAIAPEXWS",
+    "features": {
+      "progressiveWebApp": true,
+      "pushNotifications": false,
+      "accessControl": true,
+      "activityReporting": true,
+      "configurationOptions": true,
+      "feedback": true,
+      "helpPages": true,
+      "themeSelection": true
+    },
+    "appearance": {
+      "themeStyle": "Redwood Light",
+      "navigation": "SIDE",
+      "icon": "app-icon-leaf",
+      "iconBackgroundClass": "app-color-1",
+      "iconColorHEX": "#2C662D"
+    },
+    "settings": {
+      "primaryLanguage": "en",
+      "authentication": "NATIVE_APEX_ACCOUNTS"
+    },
+    "pages": [
+      {
+        "page": 1,
+        "pageType": "dashboard",
+        "pageName": "Executive ESG Overview",
+        "pageIcon": "fa-dashboard",
+        "pageIsHomePage": true
+      },
+      {
+        "page": 2,
+        "pageType": "reportAndForm",
+        "pageName": "Suppliers Directory",
+        "pageIcon": "fa-building",
+        "table": "ESG_SUPPLIERS",
+        "reportType": "interactiveReport",
+        "formType": "drawerModal"
+      },
+      {
+        "page": 4,
+        "pageType": "reportAndForm",
+        "pageName": "Multi-Year ESG Audits",
+        "pageIcon": "fa-file-text-o",
+        "table": "ESG_SUPPLIER_AUDITS",
+        "reportType": "interactiveReport",
+        "formType": "modalDialog"
+      },
+      {
+        "page": 6,
+        "pageType": "reportAndForm",
+        "pageName": "Risk Alerts & Anomaly Stream",
+        "pageIcon": "fa-exclamation-triangle",
+        "table": "ESG_RISK_ALERTS",
+        "reportType": "interactiveReport",
+        "formType": "modalDialog"
+      }
+    ],
+    "generalSettings": {
+      "version": "1.0.0",
+      "logging": true
+    },
+    "globalizationSettings": {},
+    "securitySettings": {
+      "deepLinking": true
+    }
+  }
+}
